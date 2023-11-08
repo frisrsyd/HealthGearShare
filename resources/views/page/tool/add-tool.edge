@@ -1,0 +1,71 @@
+@layout('layouts.main')
+@set('title', 'Tambah Barang')
+
+@section('body')
+<section>
+    <div class="container pt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4 shadow search-container">
+                @if(flashMessages.has('status'))
+                <div class="alert alert-success" role="alert">
+                    {{flashMessages.get('status')}}
+                </div>
+                @endif
+                <form method="POST" action="{{route('tools.store')}}" enctype="multipart/form-data">
+                    {{ csrfField() }}
+
+                    <div class="mb-3">
+                        <small for="image" class="keterangan">Tambah Barang</small>
+                        <input id="image" name="image" type="file" class="form-control mt-2" accept="image/*" required>
+                    </div>
+                    <div class="mb-3">
+                        <input id="toolNameText" name="toolName" type="text" class="form-control"
+                            placeholder="Nama alat" required>
+                    </div>
+                    <div class="mb-3">
+                        <select id="category" name="category" class="form-select form-control " required>
+                            <option selected>Pilih jenis alat</option>
+                            @each(item in categories)
+                            <option value="{{item.name}}">{{item.name}}</option>
+                            @endeach
+                            <option value="">Lainnya...</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <input id="categoryText" name="categoryText" type="text" class="form-control"
+                            placeholder="Jenis alat" style="display: none">
+                    </div>
+                    <div class=" mb-3 form-control col">
+                        @form.inputNumber({
+                        name : 'Jumlah Barang',
+                        id : 'stock',
+                        type : 'number',
+                        placeholder : 'Jumlah: '
+                        })
+                        @end
+                    </div>
+                    <button class="btn btn-primary shadow" type="submit">Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    // script with javascript for hiding and showing input text
+    const toolName = document.getElementById('category');
+    const toolNameText = document.getElementById('categoryText');
+
+    toolName.addEventListener('change', function () {
+        if (toolName.value == '') {
+            //still show the selected is other
+            toolNameText.style.display = 'block';
+            toolNameText.required = true;
+            toolName.required = false;
+        } else{
+            toolNameText.style.display = 'none';
+            toolNameText.required = false;
+            toolName.required = true;
+        }
+    });
+</script>
+@endsection

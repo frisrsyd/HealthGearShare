@@ -1,0 +1,64 @@
+@layout('layouts/account')
+@set('title', 'Masuk')
+
+@section('body')
+<section>
+    <div class="container position-absolute top-50 start-50 translate-middle">
+        <div class="row justify-content-between ">
+            <div class="col-sm-5">
+                @if(flashMessages.has('status'))
+                <div class="alert alert-success" role="alert">
+                    {{flashMessages.get('status')}}
+                </div>
+                @endif
+                <form action="{{route('login')}}" enctype="multipart/form-data" method="POST">
+                    {{csrfField()}}
+                    <div class="row">
+                        @form.input({
+                        name: 'NIK:',
+                        id :'npm',
+                        type: 'text',
+                        placeholder: 'Masukkan NIK',
+                        })
+                        @end
+                    </div>
+                    <div class="row">
+                        @form.input({
+                        name: 'Password:',
+                        id :'password',
+                        type: 'password',
+                        placeholder: 'Masukkan Password',
+                        })
+                        @end
+                    </div>
+                    <div class="row ps-3 pe-3">
+                        <button class="btn btn-primary shadow" type="submit">Masuk</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-5 d-flex align-items-center mt-3">
+                <div class="h3 text-warning">
+                    Selamat Datang di HealtGearShare
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-sm-5">
+                <div class="row">
+                    @button({
+                    type : 'button',
+                    class_button : 'btn btn-link',
+                    text : 'Lupa Password?',
+                    href : '/forgot-password',
+                    id : 'forgot-password',
+                    })
+                    @end
+                </div>
+                <div class="row text-center mt-1">
+                    <p>Belum punya akun? <a href="/signup">Daftar Sekarang</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@endsection

@@ -1,0 +1,92 @@
+@layout('layouts/main')
+@set('title', 'Detail Riwayat')
+
+@section('body')
+<section>
+    <div class="container">
+        @subtitle({
+        subtitle : 'Detail Riwayat',
+        })
+        @end
+        <div>
+            <h3>Kamera Canon EOS 800D</h3>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{{ asset('assets/images/camera.jpg') }}" alt="Canon EOS 800D" width="600px">
+            </div>
+            <div class="col-md-5">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Nama Peminjam</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>: Fulan bin Fulan</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Nama Barang</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>: Kamera Canon EOS 800D</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Jumlah Pinjam</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>: 1</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Nomor Pinjam</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>: CAM/800D/06/03/2023</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Tanggal Pinjam</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>: 06/03/2023</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Tanggal Kembali</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>: 06/03/2023</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Tempat Pengambilan</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>: <a target="_blank" style="color: #46444c"
+                                href="https://goo.gl/maps/uwTC6LrHTh4c9gt98">Ruang Jurusan Informatika Gedung A Lantai 3
+                                FMIPA USK</a></p>
+                    </div>
+                </div>
+                <div class="row">
+                    @button({
+                    type : 'submit',
+                    class_button : 'btn btn-primary',
+                    text : 'Pinjam Lagi',
+                    href : '/data-peminjaman',
+                    fun : "return confirm('Apakah kamu yakin ingin meminjam lagi?')",
+                    id : 'pinjam_lagi'
+                    })
+                    @end
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@endsection

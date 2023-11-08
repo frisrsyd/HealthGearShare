@@ -1,0 +1,45 @@
+.jmlhBox {
+  border: transparent;
+  background-color: transparent;
+  width: 2.5em;
+}
+.input-number {
+  height: 2.5em;
+}
+input[type='number'] {
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+.searchIcon :hover {
+  cursor: pointer;
+}
+
+.image-profile {
+  width: 225px;
+  height: 225px;
+  object-fit: cover;
+  border-radius: 50%;
+  border-style: inset;
+  border-color: #9cf4a7;
+}
+
+.navigation-menu {
+  text-decoration: none;
+  color: #46444c;
+}
+
+.search-container {
+  background-color: #9cf4a7;
+  padding: 1.5em;
+  border-radius: 10px;
+}
+
+.logoutBtn {
+  border: none;
+  background: transparent;
+}

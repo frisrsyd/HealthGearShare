@@ -1,0 +1,92 @@
+@layout('layouts/main')
+@set('title', 'Data Peminjaman')
+
+@section('body')
+<section>
+    <div class="container">
+        @subtitle({
+        subtitle : 'Data Peminjaman',
+        })
+        @end
+        <div>
+            <h3>{{tools?.name}}</h3>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{{ asset('assets/images' + tools?.image.url) }}" alt="{{tools?.name}}" width="600px">
+            </div>
+            <div class="col-md-4">
+                @if(flashMessages.has('status'))
+                <div class="alert alert-success" role="alert">
+                    {{flashMessages.get('status')}}
+                </div>
+                @endif
+                <form action="{{ route('checkouts.store', { tool_id: tools?.id }) }}" method="POST"
+                    enctype="multipart/form-data">
+                    {{ csrfField() }}
+
+                    <div class="row">
+                        @form.inputNumber({
+                        name : 'Jumlah Peminjaman',
+                        id : 'jumlahPeminjaman',
+                        type : 'number',
+                        placeholder : 'Jumlah: '
+                        })
+                        @end
+                    </div>
+                    <div class="row">
+                        <div class="col-md">
+                            @form.input({
+                            name : 'Tanggal Mulai',
+                            id : 'tglMulai',
+                            type : 'date',
+                            })
+                            @end
+                        </div>
+                        <div class="col-md">
+                            @form.input({
+                            name : 'Tanggal Kembali',
+                            id : 'tglKembali',
+                            type : 'date',
+                            })
+                            @end
+                        </div>
+                    </div>
+                    <div class="row">
+                        @form.inputTextarea({
+                        name : 'Tujuan Peminjaman',
+                        id : 'tujuanPeminjaman',
+                        placeholder: 'Masukkan tujuan peminjaman',
+                        rows : '4'
+                        })
+                        @end
+                    </div>
+                    <div class="row text-center">
+                        @form.inputCheckbox({
+                        name : 'Saya menyetujui seluruh syarat & ketentuan yang berlaku dalam peminjaman barang ini',
+                        id : 'snk',
+                        })
+                        @end
+                    </div>
+                    <div class="row ps-3 pe-3">
+                        <button id="pinjamButton" disabled class="btn btn-primary shadow" type="submit">Pinjam</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    let submitButton = document.getElementById('pinjamButton');
+    let snk = document.getElementById('snk');
+
+    snk.addEventListener('change', function () {
+        if (this.checked) {
+            submitButton.disabled = false;
+        } else {
+            submitButton.disabled = true;
+        }
+    });
+
+</script>
+@endsection

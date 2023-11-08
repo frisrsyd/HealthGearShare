@@ -1,0 +1,44 @@
+@layout('layouts/main')
+@set('title', 'Home page')
+
+@section('body')
+<section>
+    <div class="container">
+        @if(flashMessages.has('status'))
+        <div class="alert alert-success" role="alert">
+            {{flashMessages.get('status')}}
+        </div>
+        @endif
+        @search()
+        @end
+
+        {{-- if errror = true set subtitle barang tidak --}}
+        @if(error)
+        @subtitle({
+        subtitle: error,
+        })
+        @end
+        @end
+
+        {{-- if errror = false set subtitle barang tersedia --}}
+        @if(!error)
+        @subtitle({
+        subtitle: 'Barang yang tersedia',
+        })
+        @end
+        @end
+
+        <div class="row">
+            @each(item in categories)
+            @card.card({
+            nama_barang: item.name,
+            text_button: 'Details',
+            href: '/detail-barang/' + item.id,
+            image : 'http://localhost:8080/assets/images/' + item.slug + '.jpg',
+            })
+            @end
+            @endeach
+        </div>
+    </div>
+</section>
+@endsection

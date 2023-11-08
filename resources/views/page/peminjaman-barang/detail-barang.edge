@@ -1,0 +1,46 @@
+@layout('layouts/main')
+@set('title', 'Detail Barang')
+
+@section('body')
+<section>
+    <div class="container">
+        <div class="row">
+            @search()
+            @end
+        </div>
+        <div class="row">
+            {{-- if errror = true set subtitle barang tidak --}}
+            @if(error)
+            @subtitle({
+            subtitle: error,
+            })
+            @end
+            @end
+
+            {{-- if errror = false set subtitle barang tersedia --}}
+            @if(!error)
+            @subtitle({
+            subtitle: 'Barang yang tersedia',
+            })
+            @end
+            @end
+        </div>
+        <div class="row">
+            @each(item in tools)
+            @card.cardMedium({
+            nama_barang: item.name,
+            label_1: 'Jumlah Barang:',
+            label_2: 'Jumlah Tersedia:',
+            text_1: item.stock,
+            text_2: item.available,
+            text_button: 'Pinjam',
+            href: '/data-peminjaman/' + item.id,
+            image : 'http://localhost:8080/assets/images' + item.image.url,
+            })
+            @end
+            @endeach
+        </div>
+
+    </div>
+</section>
+@endsection

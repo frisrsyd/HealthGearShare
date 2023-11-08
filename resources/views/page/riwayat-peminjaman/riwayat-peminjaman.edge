@@ -1,0 +1,42 @@
+@layout('layouts/main')
+@set('title', 'Riwayat')
+
+@section('body')
+<section>
+    <div class="container">
+        @search()
+        @end
+
+        @if(error)
+        @subtitle({
+        subtitle: error,
+        })
+        @end
+        @endif
+
+        {{-- if errror = false set subtitle barang tersedia --}}
+        @if(!error)
+        @subtitle({
+        subtitle: 'Barang yang sedang dipinjam',
+        })
+        @end
+        @endif
+
+        <div class="row">
+            @each(checkout in checkouts)
+            @card.cardMedium({
+            nama_barang: checkout?.tool.name,
+            label_1 : 'Jumlah Pinjam:',
+            label_2 : 'Tanggal Kembali:',
+            text_1: checkout?.quantity,
+            text_2: endDate[checkout?.id - 1],
+            text_button: 'Details',
+            href: '/detail-riwayat',
+            image : 'http://localhost:8080/assets/images' + checkout?.tool.image.url
+            })
+            @end
+            @endeach
+        </div>
+    </div>
+</section>
+@endsection

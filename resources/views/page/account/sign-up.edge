@@ -1,0 +1,98 @@
+@layout('layouts/account')
+@set('title', 'Daftar Akun')
+@section('style')
+<style>
+    html,
+    body {
+        background-size: cover;
+        background-position: center;
+    }
+
+    a {
+        color: #f6ee27;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #f6ee27;
+        text-decoration: underline;
+    }
+</style>
+@endsection
+@section('body')
+<section>
+    <div class="container">
+        <div class="row justify-content-between ">
+            @if(flashMessages.has('status'))
+            <div class="alert alert-success" role="alert">
+                {{flashMessages.get('status')}}
+            </div>
+            @endif
+            <div class="col-sm-5">
+                <form action="{{route('/register/store')}}" enctype="multipart/form-data" method="post">
+                    {{ csrfField() }}
+                    <div class="row">
+                        @form.input({
+                        name: 'Nama:',
+                        id :'name',
+                        type: 'text',
+                        placeholder: 'Masukkan Nama',
+                        })
+                        @end
+                    </div>
+                    <div class="row">
+                        @form.input({
+                        name: 'Email:',
+                        id :'email',
+                        type: 'text',
+                        placeholder: 'Masukkan Email',
+                        })
+                        @end
+                    </div>
+                    <div class="row">
+                        @form.input({
+                        name: 'NIK:',
+                        id :'npm',
+                        type: 'text',
+                        placeholder: 'Masukkan NIK',
+                        })
+                        @end
+                    </div>
+                    <div class="row">
+                        @form.input({
+                        name: 'Password:',
+                        id :'password',
+                        type: 'password',
+                        placeholder: 'Masukkan Password',
+                        })
+                        @end
+                    </div>
+                    <div class="row">
+                        @form.input({
+                        name: 'Konfirmasi Password:',
+                        id :'passwordConfirmation',
+                        type: 'password',
+                        placeholder: 'Konfirmasi Password',
+                        })
+                        @end
+                        @if(flashMessages.has('password-status'))
+                        <div class="alert alert-danger">
+                            {{flashMessages.get('password-status')}}
+                        </div>
+                        @endif
+                    </div>
+                    <div class="row ps-3 pe-3">
+                        <button class="btn btn-primary shadow" type="submit">Daftar Akun</button>
+                    </div>
+                    <div class="row text-center mt-2">
+                        <p>Sudah punya akun? <a href="/login">Masuk Sekarang</a></p>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm justify-content-center d-flex align-items-center">
+                <h3 class="text-warning">Selamat Datang di HealtGearShare</h3>
+            </div>
+        </div>
+    </div>
+</section>
+@endsection

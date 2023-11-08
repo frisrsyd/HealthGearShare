@@ -1,0 +1,16 @@
+<div class="mb-3">
+    <label for="{{id}}" class="form-label">{{name}}</label>
+    <div class="form-control input-number">
+        <p class="float-start ms-2" style="text-color: #383838">{{placeholder}}</p>
+        <div class="float-end me-2">
+            <a class="searchIcon" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                <i class="bi bi-dash" style="color: #333333"></i>
+            </a>
+            <input name="{{id}}" name="{{id}}" type="{{type}}" class="jmlhBox text-center" id="{{id}}" value="" min="0"
+                required placeholder="0">
+            <a class="searchIcon" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                <i class="bi bi-plus" style="color: #333333"></i>
+            </a>
+        </div>
+    </div>
+</div>

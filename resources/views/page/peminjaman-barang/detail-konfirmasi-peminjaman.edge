@@ -1,0 +1,107 @@
+@layout('layouts/main')
+@set('title', 'Konfirmasi Peminjaman')
+
+@section('body')
+<section>
+    <div class="container">
+        @if(error)
+        @subtitle({
+        subtitle: error,
+        })
+        @end
+        @endif
+
+        {{-- if errror = false set subtitle barang tersedia --}}
+        @if(!error)
+        @subtitle({
+        subtitle: 'Barang yang tersedia',
+        })
+        @end
+        @endif
+        <div>
+            <h3>{{checkouts?.tool.name}}</h3>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{{ asset('assets/images' + checkouts?.tool.image.url) }}" alt="Canon EOS 800D" width="600px">
+            </div>
+            <div class="col-md-5">
+                @if(flashMessages.has('status'))
+                <div class="alert alert-success" role="alert">
+                    {{flashMessages.get('status')}}
+                </div>
+                @endif
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Nama Peminjam</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>: {{checkouts?.user.name}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Nama Barang</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>: {{checkouts?.tool.name}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Jumlah Pinjam</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>: {{checkouts?.quantity}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Nomor Pinjam</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>: {{noPinjam}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Tanggal Pinjam</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>: {{startDate}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Tanggal Kembali</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>: {{endDate}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Tujuan Peminjaman</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>: {{checkouts?.purpose}}</p>
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <div class="col-md">
+                        <form action="{{route('checkouts.konfirmasi-peminjaman', {checkout_id: checkouts?.id})}}"
+                            method="POST">
+                            {{ csrfField() }}
+                            <div class="row ps-3 pe-3">
+                                <button onclick="alert('Anda yakin konfirmasi pinjaman?')"
+                                    class="btn btn-success shadow btnPersetujuan" type="submit">Konfirmasi
+                                    Peminjaman</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@endsection

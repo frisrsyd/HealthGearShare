@@ -1,0 +1,196 @@
+@layout('layouts.main')
+@set('title', 'Profil Akun')
+
+@section('body')
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <img class=" image-profile" src="{{asset('assets/images/Acoount.png')}}" alt="profile-photo">
+                <div class="h2 mt-3">{{auth.user.name}}</div>
+                <div class="h5">{{auth.user.email}}</div>
+                <p class="mt-0 mb-5"><i class="bi bi-building-fill me-2"></i>{{auth.user.nik}}</p>
+                <a class="btn btn-success" href="{{route('/add-tool')}}">
+                    <i class="bi bi-pencil me-2"></i>Tambah Barang
+                </a>
+            </div>
+            <div class="col-md">
+                @if(flashMessages.has('status'))
+                <div class="alert alert-success" role="alert">
+                    {{flashMessages.get('status')}}
+                </div>
+                @endif
+                <div class="row text-center">
+                    <div class="col-md-auto">
+                        <a id="terimaPeminjaman" class="navigation-menu" href="#">
+                            <p><i class="bi bi-check2-all me-2"></i>Terima Peminjaman</p>
+                        </a>
+                    </div>
+                    <div class="col-md-auto">
+                        <a id="konfirmasiPeminjaman" class="navigation-menu" href="#">
+                            <p><i class="bi bi-check2-all me-2"></i>Konfirmasi Peminjaman</p>
+                        </a>
+                    </div>
+                    <div class="col-md-auto">
+                        <a id="menungguPersetujuan" class="navigation-menu" href="#">
+                            <p><i class="bi bi-clock me-2"></i>Menunggu Persetujuan</p>
+                        </a>
+                    </div>
+                    <div class="col-md-auto">
+                        <a id="diterima" class="navigation-menu" href="#">
+                            <p><i class="bi bi-check2-circle me-2"></i>Barang yg Diterima</p>
+                        </a>
+                    </div>
+                    <div class="col-md-auto">
+                        <a id="ditolak" class="navigation-menu" href="#">
+                            <p><i class="bi bi-x-circle me-2"></i>Barang yg Ditolak</p>
+                        </a>
+                    </div>
+                    <hr>
+                </div>
+                <div id="contentTerimaPeminjaman" class="row content" style="display: none">
+                    @each(item in waiting)
+                    @card.cardMedium({
+                    nama_barang: item.tool.name,
+                    label_1: 'Jumlah Peminjaman:',
+                    label_2: 'status:',
+                    text_1: item.quantity,
+                    text_2: item.status,
+                    text_button: 'Konfirmasi Peminjaman',
+                    href: '/detail-ubah-status/' + item.id,
+                    image : 'http://localhost:8080/assets/images' + item.tool.image.url,
+                    })
+                    @end
+                    @endeach
+                </div>
+                <div id="contentKonfirmasiPeminjaman" class="row content" style="display: none">
+                    @each(item in checkouts)
+                    @card.cardMedium({
+                    nama_barang: item.tool.name,
+                    label_1: 'Jumlah Peminjaman:',
+                    label_2: 'status:',
+                    text_1: item.quantity,
+                    text_2: item.status,
+                    text_button: 'Konfirmasi Peminjaman',
+                    href: '/detail-konfirmasi-peminjaman/' + item.id,
+                    image : 'http://localhost:8080/assets/images' + item.tool.image.url,
+                    })
+                    @end
+                    @endeach
+                </div>
+                <div id="contentMenungguPersetujuan" class="row content" style="display: none">
+                    @each(item in waiting)
+                    <div class="card me-3 mb-5" style="width: 24rem;">
+                        <img src="{{ asset('assets/images' + item.tool.image.url) }}" class="card-img-top"
+                            alt="Foto {{item.tool.name}}">
+                        <div class="card-body">
+                            <div class="row">
+                                <h5 class="card-title">{{item.tool.name}}</h5>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <p class="card-text mb-2">Jumlah Peminjaman:</p>
+                                    <p class="card-text">status:</p>
+                                </div>
+                                <div class="col-md text-end">
+                                    <p class="card-text mb-2 {{class_text_1}}">{{item.quantity}}</p>
+                                    <p class="card-text {{class_text_2}}">{{item.status}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endeach
+                </div>
+                <div id="contentDiterima" class="row content" style="display: none">
+                    @each(item in diterima)
+                    @card.cardMedium({
+                    nama_barang: item.tool.name,
+                    label_1: 'Jumlah Peminjaman:',
+                    label_2: 'status:',
+                    text_1: item.quantity,
+                    text_2: item.status,
+                    text_button: 'Pinjam',
+                    href: '#',
+                    image : 'http://localhost:8080/assets/images' + item.tool.image.url,
+                    })
+                    @end
+                    @endeach
+                </div>
+                <div id="contentDitolak" class="row content" style="display: none">
+                    @each(item in ditolak)
+                    @card.cardMedium({
+                    nama_barang: item.tool.name,
+                    label_1: 'Jumlah Peminjaman:',
+                    label_2: 'status:',
+                    text_1: item.quantity,
+                    text_2: item.status,
+                    text_button: 'Pinjam',
+                    href: '#',
+                    image : 'http://localhost:8080/assets/images' + item.tool.image.url,
+                    })
+                    @end
+                    @endeach
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    const diterima = document.getElementById('diterima');
+    diterima.addEventListener('click', () => {
+        document.getElementById('contentDiterima').style.display = 'block';
+        document.getElementById('contentDitolak').style.display = 'none';
+        document.getElementById('contentTerimaPeminjaman').style.display = 'none';
+        document.getElementById('contentKonfirmasiPeminjaman').style.display = 'none';
+        document.getElementById('contentMenungguPersetujuan').style.display = 'none';
+    });
+
+    const ditolak = document.getElementById('ditolak');
+    ditolak.addEventListener('click', () => {
+        document.getElementById('contentDiterima').style.display = 'none';
+        document.getElementById('contentDitolak').style.display = 'block';
+        document.getElementById('contentTerimaPeminjaman').style.display = 'none';
+        document.getElementById('contentKonfirmasiPeminjaman').style.display = 'none';
+        document.getElementById('contentMenungguPersetujuan').style.display = 'none';
+    });
+
+    const terimaPeminjaman = document.getElementById('terimaPeminjaman');
+    terimaPeminjaman.addEventListener('click', () => {
+        document.getElementById('contentDiterima').style.display = 'none';
+        document.getElementById('contentDitolak').style.display = 'none';
+        document.getElementById('contentTerimaPeminjaman').style.display = 'block';
+        document.getElementById('contentKonfirmasiPeminjaman').style.display = 'none';
+        document.getElementById('contentMenungguPersetujuan').style.display = 'none';
+    });
+
+    const konfirmasiPeminjaman = document.getElementById('konfirmasiPeminjaman');
+    konfirmasiPeminjaman.addEventListener('click', () => {
+        document.getElementById('contentDiterima').style.display = 'none';
+        document.getElementById('contentDitolak').style.display = 'none';
+        document.getElementById('contentTerimaPeminjaman').style.display = 'none';
+        document.getElementById('contentKonfirmasiPeminjaman').style.display = 'block';
+        document.getElementById('contentMenungguPersetujuan').style.display = 'none';
+    });
+
+    const menungguPersetujuan = document.getElementById('menungguPersetujuan');
+    menungguPersetujuan.addEventListener('click', () => {
+        document.getElementById('contentDiterima').style.display = 'none';
+        document.getElementById('contentDitolak').style.display = 'none';
+        document.getElementById('contentTerimaPeminjaman').style.display = 'none';
+        document.getElementById('contentKonfirmasiPeminjaman').style.display = 'none';
+        document.getElementById('contentMenungguPersetujuan').style.display = 'block';
+    });
+
+    const tabVIew = document.querySelectorAll('.navigation-menu');
+
+    tabVIew.forEach((item, index) => {
+        item.addEventListener('click', () => {
+            tabVIew.forEach((item) => {
+                item.style.color = '#46444c'
+            });
+            tabVIew[index].style.color = '#007bff';
+        });
+    });
+
+</script>
+@endsection

@@ -1,0 +1,46 @@
+@layout('layouts/main')
+@set('title', 'Sedang Dipinjam')
+
+@section('body')
+<section>
+    <div class="container">
+        <div class="row">
+            @search()
+            @end
+        </div>
+        <div class="row">
+            @if(error)
+            @subtitle({
+            subtitle: error,
+            })
+            @end
+            @endif
+
+            {{-- if errror = false set subtitle barang tersedia --}}
+            @if(!error)
+            @subtitle({
+            subtitle: 'Barang yang sedang dipinjam',
+            })
+            @end
+            @endif
+        </div>
+
+        <div class="row">
+            @each(checkout in checkouts)
+            @card.cardLarge({
+            nama_barang: checkout?.tool.name,
+            label_1: 'Jumlah Pinjam:',
+            label_2: 'Status:',
+            text_1: checkout?.quantity,
+            text_2: checkout?.status,
+            class_text_2: checkout?.status != 'Dipinjam' ? 'text-danger' : 'text-success',
+            text_button: 'Details',
+            href: '/detail-peminjaman/'+ checkout?.id,
+            image : 'http://localhost:8080/assets/images' + checkout?.tool.image.url
+            })
+            @end
+            @endeach
+        </div>
+    </div>
+</section>
+@endsection
