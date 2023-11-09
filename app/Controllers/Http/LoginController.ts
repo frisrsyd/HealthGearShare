@@ -15,7 +15,7 @@ export default class LoginController {
             // Verify password
             const passwordVerified = await Hash.verify(user.password, data.password);
             if (!passwordVerified) {
-              session.flash('status', 'Invalid npm or password');
+              session.flash('status', 'Invalid nik or password');
               return response.redirect('/login');
             }
         
@@ -24,7 +24,7 @@ export default class LoginController {
             session.flash('status', 'Login berhasil');
             return response.redirect('/home');
         } catch (error) {
-            session.flash('status', 'Invalid npm or password');
+            session.flash('status', 'Invalid nik or password');
             return response.redirect('/login');
         }
     }
