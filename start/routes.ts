@@ -61,15 +61,13 @@ Route.group(() => {
     //logout
     Route.post('/logout', 'LoginController.logout').as('logout')
 
-    
+    //home route
+    Route.get('/', 'PagesController.home')
+    Route.get('/home', 'PagesController.home')
     
     //account
     Route.get('/akun', 'PagesController.akun')
 }).middleware('auth')
-
-//home route
-Route.get('/', 'PagesController.home')
-Route.get('/home', 'PagesController.home')
 
 //auth route
 Route.get('/login', 'PagesController.login')
