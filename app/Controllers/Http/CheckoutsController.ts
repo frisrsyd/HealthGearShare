@@ -11,11 +11,13 @@ export default class CheckoutsController {
 
         let status = ''
         
-        let available = tool.stock - data.jumlahPeminjaman
+        let available = tool.available - data.jumlahPeminjaman
         if (available > 0 ) {
             status = 'Tersedia'
-        } else {
+        } else if(available == 0) {
             status = 'Tidak Tersedia'
+        }else{
+            return session.flash('status', 'Jumlah alat yang tersedia tidak mencukupi')
         }
 
         const updateTool = await Tool.updateOrCreate({
@@ -38,13 +40,13 @@ export default class CheckoutsController {
         })
         if (updateTool) {
             if(checkout) {
-                session.flash('status', 'Berhasil meminjam alat')
+                session.flash('status', 'Berhasil mengajukan peminjaman alat')
                 return response.redirect().toRoute('rekap-peminjaman', { checkout_id: checkout.id })
             } else {
-                session.flash('status', 'Gagal meminjam alat(checkout)')
+                session.flash('status', 'Gagal mengajukan peminjaman alat(checkout)')
             }
         } else {
-            session.flash('status', 'Gagal meminjam alat(updateTool)')
+            session.flash('status', 'Gagal mengajukan peminjaman alat(updateTool)')
         }
     }
 
@@ -54,7 +56,7 @@ export default class CheckoutsController {
 
         let status = ''
         
-        let available = tool.stock + checkout.quantity
+        let available = tool.available + checkout.quantity
         if (available > 0 ) {
             status = 'Tersedia'
         } else {
@@ -104,6 +106,7 @@ export default class CheckoutsController {
 
     public async updateStatusTolak({response, params, session}: HttpContextContract) {
         const checkout = await Checkout.findByOrFail('id', params.checkout_id)
+        const tool = await Tool.findByOrFail('id', checkout.toolId)
 
         const updateCheckout = await Checkout.updateOrCreate({
             id: checkout.id
@@ -111,8 +114,26 @@ export default class CheckoutsController {
             status: 'Ditolak'
         })
 
+        let status = ''
+        let available = tool.available + checkout.quantity
+        if (available > 0 ) {
+            status = 'Tersedia'
+        } else {
+            status = 'Tidak Tersedia'
+        }
+
+        const updateTool = await Tool.updateOrCreate({
+            id: tool.id
+        }, {
+            status: status,
+            available: available
+        })
         if(updateCheckout) {
+            if(updateTool) {
             session.flash('status', 'Peminjaman ditolak')
+            } else {
+                session.flash('status', 'Gagal menolak pinjaman(updateTool)')
+            }
         } else {
             session.flash('status', 'Gagal menolak pinjaman(updateCheckout)')
         }

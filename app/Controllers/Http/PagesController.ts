@@ -25,7 +25,7 @@ export default class PagesController {
 
     public async detailBarang({ view, params, request }: HttpContextContract) {
         // find tool where category_id = category.id and status = 'Tersedia'
-        const tool = await Tool.query().where('categoryId', params.category_id).andWhere('status', 'Tersedia')
+        const tool = await Tool.query().where('categoryId', params.category_id).andWhere('status', 'Tersedia').preload('user')
         if (tool.length == 0) {
             return view.render('page/peminjaman-barang/detail-barang', { 'error': 'Barang tidak ditemukan' })
         }

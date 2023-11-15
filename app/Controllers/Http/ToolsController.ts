@@ -10,7 +10,7 @@ export default class ToolsController {
 
   public async store({request, response, session, auth}: HttpContextContract) {
     const tool = new Tool()
-    const data = request.only(['toolName', 'category', 'categoryText' ,'stock'])
+    const data = request.only(['toolName', 'category', 'categoryText' ,'stock', 'maps'])
     if (data.categoryText != null) {
       data.category = data.categoryText
     }
@@ -75,7 +75,9 @@ export default class ToolsController {
       categoryId: category_id, 
       stock: tool.stock, 
       available: tool.available, 
-      status: status})
+      status: status,
+      maps: data.maps
+    })
     // await tool.save()
     
     if (tool_ref) {

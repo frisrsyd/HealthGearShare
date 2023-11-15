@@ -27,13 +27,16 @@
         </div>
         <div class="row">
             @each(item in tools)
-            @card.cardMedium({
+            @card.cardMediumThree({
             nama_barang: item.name,
-            label_1: 'Jumlah Barang:',
+            label_1: 'Penyedia:',
             label_2: 'Jumlah Tersedia:',
-            text_1: item.stock,
+            label_3: 'Link Google Maps:',
+            text_1: item.user.name,
             text_2: item.available,
+            href_text_3: item.maps,
             text_button: 'Pinjam',
+            href: '/data-peminjaman/' + item.id,
             image : 'http://localhost:8080/assets/images' + item.image.url,
             })
             @end

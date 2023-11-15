@@ -28,28 +28,29 @@
                     </div>
                     <div class="col-md-auto">
                         <a id="konfirmasiPeminjaman" class="navigation-menu" href="#">
-                            <p><i class="bi bi-check2-all me-2"></i>Konfirmasi Peminjaman</p>
+                            <p><i class="bi bi-check2-all me-2"></i>Konfirmasi Pengambilan</p>
                         </a>
                     </div>
                     <div class="col-md-auto">
                         <a id="menungguPersetujuan" class="navigation-menu" href="#">
-                            <p><i class="bi bi-clock me-2"></i>Menunggu Persetujuan</p>
+                            <p><i class="text-warning bi bi-clock me-2"></i>Menunggu Persetujuan</p>
                         </a>
                     </div>
                     <div class="col-md-auto">
                         <a id="diterima" class="navigation-menu" href="#">
-                            <p><i class="bi bi-check2-circle me-2"></i>Barang yg Diterima</p>
+                            <p><i class="text-success bi bi-check2-circle me-2"></i>Barang yg Disetujui</p>
                         </a>
                     </div>
                     <div class="col-md-auto">
                         <a id="ditolak" class="navigation-menu" href="#">
-                            <p><i class="bi bi-x-circle me-2"></i>Barang yg Ditolak</p>
+                            <p><i class="text-danger bi bi-x-circle me-2"></i>Barang yg Ditolak</p>
                         </a>
                     </div>
                     <hr>
                 </div>
                 <div id="contentTerimaPeminjaman" class="row content" style="display: none">
                     @each(item in waiting)
+                    @if(auth.user.id == item.tool.userId)
                     @card.cardMedium({
                     nama_barang: item.tool.name,
                     label_1: 'Jumlah Peminjaman:',
@@ -61,74 +62,69 @@
                     image : 'http://localhost:8080/assets/images' + item.tool.image.url,
                     })
                     @end
+                    @endif
                     @endeach
                 </div>
                 <div id="contentKonfirmasiPeminjaman" class="row content" style="display: none">
                     @each(item in checkouts)
+                    @if(auth.user.id == item.tool.userId)
                     @card.cardMedium({
                     nama_barang: item.tool.name,
                     label_1: 'Jumlah Peminjaman:',
                     label_2: 'status:',
                     text_1: item.quantity,
                     text_2: item.status,
-                    text_button: 'Konfirmasi Peminjaman',
+                    text_button: 'Konfirmasi Pengambilan',
                     href: '/detail-konfirmasi-peminjaman/' + item.id,
                     image : 'http://localhost:8080/assets/images' + item.tool.image.url,
                     })
                     @end
+                    @endif
                     @endeach
                 </div>
                 <div id="contentMenungguPersetujuan" class="row content" style="display: none">
                     @each(item in waiting)
-                    <div class="card me-3 mb-5" style="width: 24rem;">
-                        <img src="{{ asset('assets/images' + item.tool.image.url) }}" class="card-img-top"
-                            alt="Foto {{item.tool.name}}">
-                        <div class="card-body">
-                            <div class="row">
-                                <h5 class="card-title">{{item.tool.name}}</h5>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <p class="card-text mb-2">Jumlah Peminjaman:</p>
-                                    <p class="card-text">status:</p>
-                                </div>
-                                <div class="col-md text-end">
-                                    <p class="card-text mb-2 {{class_text_1}}">{{item.quantity}}</p>
-                                    <p class="card-text {{class_text_2}}">{{item.status}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @if(auth.user.id == item.userId)
+                    @card.cardMediumNoButton({
+                    nama_barang: item.tool.name,
+                    label_1: 'Jumlah Peminjaman:',
+                    label_2: 'status:',
+                    text_1: item.quantity,
+                    text_2: item.status,
+                    image : 'http://localhost:8080/assets/images' + item.tool.image.url,
+                    })
+                    @end
+                    @endif
                     @endeach
                 </div>
                 <div id="contentDiterima" class="row content" style="display: none">
                     @each(item in diterima)
-                    @card.cardMedium({
+                    @if(auth.user.id == item.userId || auth.user.id == item.tool.userId)
+                    @card.cardMediumNoButton({
                     nama_barang: item.tool.name,
                     label_1: 'Jumlah Peminjaman:',
                     label_2: 'status:',
                     text_1: item.quantity,
-                    text_2: item.status,
-                    text_button: 'Pinjam',
-                    href: '#',
+                    text_2: 'Diterima',
                     image : 'http://localhost:8080/assets/images' + item.tool.image.url,
                     })
                     @end
+                    @endif
                     @endeach
                 </div>
                 <div id="contentDitolak" class="row content" style="display: none">
                     @each(item in ditolak)
-                    @card.cardMedium({
+                    @if(auth.user.id == item.userId || auth.user.id == item.tool.userId)
+                    @card.cardMediumNoButton({
                     nama_barang: item.tool.name,
                     label_1: 'Jumlah Peminjaman:',
                     label_2: 'status:',
                     text_1: item.quantity,
                     text_2: item.status,
-                    text_button: 'Pinjam',
-                    href: '#',
                     image : 'http://localhost:8080/assets/images' + item.tool.image.url,
                     })
                     @end
+                    @endif
                     @endeach
                 </div>
             </div>

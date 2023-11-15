@@ -1,5 +1,5 @@
 @layout('layouts/main')
-@set('title', 'Konfirmasi Peminjaman')
+@set('title', 'Konfirmasi Pengambilan')
 
 @section('body')
 <section>
@@ -14,7 +14,7 @@
         {{-- if errror = false set subtitle barang tersedia --}}
         @if(!error)
         @subtitle({
-        subtitle: 'Barang yang tersedia',
+        subtitle: 'Konfirmasi Pengambilan',
         })
         @end
         @endif
@@ -93,9 +93,9 @@
                             method="POST">
                             {{ csrfField() }}
                             <div class="row ps-3 pe-3">
-                                <button onclick="alert('Anda yakin konfirmasi pinjaman?')"
+                                <button onclick="alert('Anda yakin konfirmasi pengambilan?')"
                                     class="btn btn-success shadow btnPersetujuan" type="submit">Konfirmasi
-                                    Peminjaman</button>
+                                    Pengambilan</button>
                             </div>
                         </form>
                     </div>

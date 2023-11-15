@@ -14,6 +14,7 @@ export default class extends BaseSchema {
       table.integer('stock').notNullable()
       table.integer('available').notNullable()
       table.string('status').notNullable()
+      table.string('maps').notNullable()
       table.timestamp('created_at', { useTz: true }).defaultTo(this.now())
       table.timestamp('updated_at', { useTz: true }).defaultTo(this.now())
     })
