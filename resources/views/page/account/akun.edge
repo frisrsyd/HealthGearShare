@@ -32,18 +32,23 @@
                         </a>
                     </div>
                     <div class="col-md-auto">
+                        <a id="pengembalian" class="navigation-menu" href="#">
+                            <p><i class="bi bi-check2-circle me-2"></i>Konfirmasi Pengembalian</p>
+                        </a>
+                    </div>
+                    <div class="col-md-auto">
                         <a id="menungguPersetujuan" class="navigation-menu" href="#">
                             <p><i class="text-warning bi bi-clock me-2"></i>Menunggu Persetujuan</p>
                         </a>
                     </div>
                     <div class="col-md-auto">
-                        <a id="diterima" class="navigation-menu" href="#">
-                            <p><i class="text-success bi bi-check2-circle me-2"></i>Barang yg Disetujui</p>
+                        <a id="ditolak" class="navigation-menu" href="#">
+                            <p><i class="text-danger bi bi-x-circle me-2"></i>Barang yg Ditolak</p>
                         </a>
                     </div>
                     <div class="col-md-auto">
-                        <a id="ditolak" class="navigation-menu" href="#">
-                            <p><i class="text-danger bi bi-x-circle me-2"></i>Barang yg Ditolak</p>
+                        <a id="myTool" class="navigation-menu" href="#">
+                            <p><i class="bi bi-person-rolodex me-2"></i>My Tool</p>
                         </a>
                     </div>
                     <hr>
@@ -102,16 +107,18 @@
                     @endif
                     @endeach
                 </div>
-                <div id="contentDiterima" class="row content" style="display: none">
-                    @each(item in diterima)
+                <div id="contentPengembalian" class="row content" style="display: none">
+                    @each(item in pengembalian)
                     @if(auth.user.id == item.userId || auth.user.id == item.tool.userId)
-                    @card.cardMediumNoButton({
+                    @card.cardMedium({
                     nama_barang: item.tool.name,
                     label_1: 'Jumlah Peminjaman:',
                     label_2: 'status:',
                     text_1: item.quantity,
-                    text_2: 'Diterima',
-                    class_text_2: 'text-success',
+                    text_2: item.status,
+                    class_text_2: 'text-warning',
+                    text_button: 'Konfirmasi Pengembalian',
+                    href: '/detail-konfirmasi-pengembalian/' + item.id,
                     image : 'http://localhost:8080/assets/images' + item.tool.image.url,
                     })
                     @end
@@ -134,54 +141,84 @@
                     @endif
                     @endeach
                 </div>
+                <div id="contentMyTool" class="row content" style="display: none">
+                    @each(item in myTool)
+                    @if(auth.user.id == item.userId)
+                    @card.cardMediumNoButton({
+                    nama_barang: item.name,
+                    label_1: 'Jumlah Total:',
+                    label_2: 'Jumlah Tersedia:',
+                    text_1: item.stock,
+                    text_2: item.available,
+                    image : 'http://localhost:8080/assets/images' + item.image.url,
+                    })
+                    @end
+                    @endif
+                    @endeach
+                </div>
             </div>
         </div>
     </div>
 </section>
 <script>
-    const diterima = document.getElementById('diterima');
-    diterima.addEventListener('click', () => {
-        document.getElementById('contentDiterima').style.display = 'block';
+    const pengembalian = document.getElementById('pengembalian');
+    pengembalian.addEventListener('click', () => {
+        document.getElementById('contentPengembalian').style.display = 'block';
         document.getElementById('contentDitolak').style.display = 'none';
         document.getElementById('contentTerimaPeminjaman').style.display = 'none';
         document.getElementById('contentKonfirmasiPeminjaman').style.display = 'none';
         document.getElementById('contentMenungguPersetujuan').style.display = 'none';
+        document.getElementById('contentMyTool').style.display = 'none';
     });
 
     const ditolak = document.getElementById('ditolak');
     ditolak.addEventListener('click', () => {
-        document.getElementById('contentDiterima').style.display = 'none';
+        document.getElementById('contentPengembalian').style.display = 'none';
         document.getElementById('contentDitolak').style.display = 'block';
         document.getElementById('contentTerimaPeminjaman').style.display = 'none';
         document.getElementById('contentKonfirmasiPeminjaman').style.display = 'none';
         document.getElementById('contentMenungguPersetujuan').style.display = 'none';
+        document.getElementById('contentMyTool').style.display = 'none';
     });
 
     const terimaPeminjaman = document.getElementById('terimaPeminjaman');
     terimaPeminjaman.addEventListener('click', () => {
-        document.getElementById('contentDiterima').style.display = 'none';
+        document.getElementById('contentPengembalian').style.display = 'none';
         document.getElementById('contentDitolak').style.display = 'none';
         document.getElementById('contentTerimaPeminjaman').style.display = 'block';
         document.getElementById('contentKonfirmasiPeminjaman').style.display = 'none';
         document.getElementById('contentMenungguPersetujuan').style.display = 'none';
+        document.getElementById('contentMyTool').style.display = 'none';
     });
 
     const konfirmasiPeminjaman = document.getElementById('konfirmasiPeminjaman');
     konfirmasiPeminjaman.addEventListener('click', () => {
-        document.getElementById('contentDiterima').style.display = 'none';
+        document.getElementById('contentPengembalian').style.display = 'none';
         document.getElementById('contentDitolak').style.display = 'none';
         document.getElementById('contentTerimaPeminjaman').style.display = 'none';
         document.getElementById('contentKonfirmasiPeminjaman').style.display = 'block';
         document.getElementById('contentMenungguPersetujuan').style.display = 'none';
+        document.getElementById('contentMyTool').style.display = 'none';
     });
 
     const menungguPersetujuan = document.getElementById('menungguPersetujuan');
     menungguPersetujuan.addEventListener('click', () => {
-        document.getElementById('contentDiterima').style.display = 'none';
+        document.getElementById('contentPengembalian').style.display = 'none';
         document.getElementById('contentDitolak').style.display = 'none';
         document.getElementById('contentTerimaPeminjaman').style.display = 'none';
         document.getElementById('contentKonfirmasiPeminjaman').style.display = 'none';
         document.getElementById('contentMenungguPersetujuan').style.display = 'block';
+        document.getElementById('contentMyTool').style.display = 'none';
+    });
+
+    const myTool = document.getElementById('myTool');
+    myTool.addEventListener('click', () => {
+        document.getElementById('contentPengembalian').style.display = 'none';
+        document.getElementById('contentDitolak').style.display = 'none';
+        document.getElementById('contentTerimaPeminjaman').style.display = 'none';
+        document.getElementById('contentKonfirmasiPeminjaman').style.display = 'none';
+        document.getElementById('contentMenungguPersetujuan').style.display = 'none';
+        document.getElementById('contentMyTool').style.display = 'block';
     });
 
     const tabVIew = document.querySelectorAll('.navigation-menu');

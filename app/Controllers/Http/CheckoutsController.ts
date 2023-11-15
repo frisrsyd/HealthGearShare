@@ -59,17 +59,17 @@ export default class CheckoutsController {
         const updateCheckout = await Checkout.updateOrCreate({
             id: checkout.id
         }, {
-            status: 'Dikembalikan'
+            status: 'Belum Diantar'
         })
         if (updateTool) {
             if(updateCheckout) {
-                session.flash('status', 'Berhasil menembalikan barang')
+                session.flash('status', 'Berhasil mengajukan pengembalian barang')
                 return response.redirect().toRoute('rekap-peminjaman', { checkout_id: checkout.id })
             } else {
-                session.flash('status', 'Gagal mengembalikan barang(updateCheckout)')
+                session.flash('status', 'Gagal mengajukan pengembalian barang(updateCheckout)')
             }
         } else {
-            session.flash('status', 'Gagal mengembalikan barang(updateTool)')
+            session.flash('status', 'Gagal mengajukan pengembalian barang(updateTool)')
         }
     }
 
@@ -145,6 +145,22 @@ export default class CheckoutsController {
             session.flash('status', 'Konfirmasi peminjaman berhasil')
         } else {
             session.flash('status', 'Konfirmasi peminjaman gagal(updateCheckout)')
+        }
+        return response.redirect().toRoute('/akun')
+    }
+    public async konfirmasiPengembalian({response, params, session}: HttpContextContract) {
+        const checkout = await Checkout.findByOrFail('id', params.checkout_id)
+
+        const updateCheckout = await Checkout.updateOrCreate({
+            id: checkout.id
+        }, {
+            status: 'Dikembalikan'
+        })
+
+        if(updateCheckout) {
+            session.flash('status', 'Konfirmasi Pengembalian berhasil')
+        } else {
+            session.flash('status', 'Konfirmasi Pengembalian gagal(updateCheckout)')
         }
         return response.redirect().toRoute('/akun')
     }

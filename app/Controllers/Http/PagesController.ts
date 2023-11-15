@@ -159,11 +159,12 @@ export default class PagesController {
     public async akun({ view, auth }: HttpContextContract) {
         const user = await User.findBy('id', auth.user?.id)
         const checkout = await Checkout.query().where('status', 'Belum Diambil').preload('tool').preload('user')
-        const diterima = await Checkout.query().where('status', 'Belum Diambil').preload('tool').preload('user')
+        const pengembalian = await Checkout.query().where('status', 'Belum Diantar').preload('tool').preload('user')
         const ditolak = await Checkout.query().where('status', 'Ditolak').preload('tool').preload('user')
         const waiting = await Checkout.query().where('status', 'Menunggu Persetujuan').preload('tool').preload('user')
+        const myTool = await Tool.query().preload('category').preload('user')
 
-        return view.render('page/account/akun', { 'users': user, 'checkouts': checkout, 'diterima': diterima, 'ditolak': ditolak, 'waiting': waiting })
+        return view.render('page/account/akun', { 'users': user, 'checkouts': checkout, 'pengembalian': pengembalian, 'ditolak': ditolak, 'waiting': waiting, 'myTool': myTool })
     }
 
     public async addTool({ view }: HttpContextContract) {
@@ -200,5 +201,21 @@ export default class PagesController {
             return view.render('page/peminjaman-barang/detail-konfirmasi-peminjaman', { 'error': 'Tidak ada barang yang sedang dipinjam' })
         }
         return view.render('page/peminjaman-barang/detail-konfirmasi-peminjaman', { 'checkouts': checkout, 'noPinjam': noPinjam , 'startDate': startDate, 'endDate': endDate, 'userTool': userTool })
+    }
+    
+    public async konfirmasiPengembalian({ view, params }: HttpContextContract) {
+        const checkout = await Checkout.findBy('id', params.checkout_id)
+        await checkout?.load('tool')
+        await checkout?.load('user')
+        const userTool = await User.findBy('id', checkout?.tool.userId)
+        let noPinjam = checkout?.createdAt.toFormat('dd/MM/yyyy')
+        noPinjam = checkout?.tool.name.toUpperCase().replace(/ /g, '_') + '/' + noPinjam + '/' + checkout?.id
+        const startDate = checkout?.startDate.toFormat('dd/MM/yyyy')
+        const endDate = checkout?.endDate.toFormat('dd/MM/yyyy')
+
+        if (checkout == null) {
+            return view.render('page/pengembalian-barang/detail-konfirmasi-pengembalian', { 'error': 'Tidak ada barang yang sedang dipinjam' })
+        }
+        return view.render('page/pengembalian-barang/detail-konfirmasi-pengembalian', { 'checkouts': checkout, 'noPinjam': noPinjam , 'startDate': startDate, 'endDate': endDate, 'userTool': userTool })
     }
 }

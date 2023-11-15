@@ -38,9 +38,11 @@ Route.group(() => {
     //ubah status peminjaman
     Route.get('/detail-ubah-status/:checkout_id', 'PagesController.detailUbahStatus').as('checkouts.detail-ubah-status')
     Route.get('/detail-konfirmasi-peminjaman/:checkout_id', 'PagesController.konfirmasiPeminjaman')
+    Route.get('/detail-konfirmasi-pengembalian/:checkout_id', 'PagesController.konfirmasiPengembalian')
     Route.post('/update-status/:checkout_id', 'CheckoutsController.updateStatusTerima').as('checkouts.update-status')
     Route.post('/tolak-status/:checkout_id', 'CheckoutsController.updateStatusTolak').as('checkouts.tolak-status')
     Route.post('/konfirmasi-peminjaman/:checkout_id', 'CheckoutsController.konfirmasiPeminjaman').as('checkouts.konfirmasi-peminjaman')
+    Route.post('/konfirmasi-pengembalian/:checkout_id', 'CheckoutsController.konfirmasiPengembalian').as('checkouts.konfirmasi-pengembalian')
 
     //pengembalian barang
     Route.get('/sedang-dipinjam', 'PagesController.sedangDipinjam')
