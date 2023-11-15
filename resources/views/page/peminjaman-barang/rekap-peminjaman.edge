@@ -23,7 +23,8 @@
         </div>
         <div class="row">
             <div class="col-md-6">
-                <img src="{{ asset('assets/images' + checkouts?.tool.image.url) }}" alt="Canon EOS 800D" width="600px">
+                <img src="{{ asset('assets/images' + checkouts?.tool.image.url) }}" alt="{{checkouts?.tool.slug}}"
+                    width="600px">
             </div>
             <div class="col-md-5">
                 @if(flashMessages.has('status'))
@@ -45,6 +46,14 @@
                     </div>
                     <div class="col-md-6">
                         <p>: {{checkouts?.tool.name}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Nama Penyedia</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>: {{userTool.name}}</p>
                     </div>
                 </div>
                 <div class="row">
@@ -77,6 +86,16 @@
                     </div>
                     <div class="col-md-6">
                         <p>: {{endDate}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Link Google Maps</p>
+                    </div>
+                    <div class="col-md-6">
+                        <a target="_blank" href="{{checkouts?.tool.maps}}">
+                            <p>: Klik Disini</p>
+                        </a>
                     </div>
                 </div>
                 <div class="row">

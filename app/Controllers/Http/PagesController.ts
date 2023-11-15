@@ -49,6 +49,7 @@ export default class PagesController {
         const checkout = await Checkout.findBy('id', params.checkout_id)
         await checkout?.load('tool')
         await checkout?.load('user')
+        const userTool = await User.findBy('id', checkout?.tool.userId)
         // change the format of the date
         let noPinjam = checkout?.createdAt.toFormat('dd/MM/yyyy')
         noPinjam = checkout?.tool.name.toUpperCase().replace(/ /g, '_') + '/' + noPinjam + '/' + checkout?.id
@@ -57,7 +58,7 @@ export default class PagesController {
         if (checkout == null) {
             return view.render('page/peminjaman-barang/rekap-peminjaman', { 'error': 'Tidak ada barang yang sedang dipinjam' })
         }
-        return view.render('page/peminjaman-barang/rekap-peminjaman', { 'checkouts': checkout, 'noPinjam': noPinjam , 'startDate': startDate, 'endDate': endDate })
+        return view.render('page/peminjaman-barang/rekap-peminjaman', { 'checkouts': checkout, 'noPinjam': noPinjam , 'startDate': startDate, 'endDate': endDate, 'userTool': userTool })
     }
 
     public async sedangDipinjam({ view, auth, request }: HttpContextContract) {
@@ -189,6 +190,7 @@ export default class PagesController {
         const checkout = await Checkout.findBy('id', params.checkout_id)
         await checkout?.load('tool')
         await checkout?.load('user')
+        const userTool = await User.findBy('id', checkout?.tool.userId)
         let noPinjam = checkout?.createdAt.toFormat('dd/MM/yyyy')
         noPinjam = checkout?.tool.name.toUpperCase().replace(/ /g, '_') + '/' + noPinjam + '/' + checkout?.id
         const startDate = checkout?.startDate.toFormat('dd/MM/yyyy')
@@ -197,6 +199,6 @@ export default class PagesController {
         if (checkout == null) {
             return view.render('page/peminjaman-barang/detail-konfirmasi-peminjaman', { 'error': 'Tidak ada barang yang sedang dipinjam' })
         }
-        return view.render('page/peminjaman-barang/detail-konfirmasi-peminjaman', { 'checkouts': checkout, 'noPinjam': noPinjam , 'startDate': startDate, 'endDate': endDate })
+        return view.render('page/peminjaman-barang/detail-konfirmasi-peminjaman', { 'checkouts': checkout, 'noPinjam': noPinjam , 'startDate': startDate, 'endDate': endDate, 'userTool': userTool })
     }
 }

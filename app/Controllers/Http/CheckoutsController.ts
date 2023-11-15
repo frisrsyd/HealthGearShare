@@ -8,24 +8,12 @@ export default class CheckoutsController {
         const data = request.only(['toolId', 'jumlahPeminjaman', 'tglMulai', 'tglKembali', 'tujuanPeminjaman'])
         const tool = await Tool.findByOrFail('id', params.tool_id)
         const user = await User.findByOrFail('id', auth.user?.id)
-
-        let status = ''
         
         let available = tool.available - data.jumlahPeminjaman
-        if (available > 0 ) {
-            status = 'Tersedia'
-        } else if(available == 0) {
-            status = 'Tidak Tersedia'
-        }else{
-            return session.flash('status', 'Jumlah alat yang tersedia tidak mencukupi')
+        if (available < 0 ) {
+            session.flash('status', 'Jumlah alat yang tersedia tidak mencukupi')
+            return response.redirect().toRoute('data-peminjaman', { tool_id: tool.id })
         }
-
-        const updateTool = await Tool.updateOrCreate({
-            id: tool.id
-        }, {
-            status: status,
-            available: available
-        })
 
         let checkoutStatus = 'Menunggu Persetujuan'
 
@@ -38,15 +26,13 @@ export default class CheckoutsController {
             endDate: data.tglKembali,
             purpose: data.tujuanPeminjaman
         })
-        if (updateTool) {
-            if(checkout) {
-                session.flash('status', 'Berhasil mengajukan peminjaman alat')
-                return response.redirect().toRoute('rekap-peminjaman', { checkout_id: checkout.id })
-            } else {
-                session.flash('status', 'Gagal mengajukan peminjaman alat(checkout)')
-            }
+
+        if(checkout) {
+            session.flash('status', 'Berhasil mengajukan peminjaman alat')
+            return response.redirect().toRoute('rekap-peminjaman', { checkout_id: checkout.id })
         } else {
-            session.flash('status', 'Gagal mengajukan peminjaman alat(updateTool)')
+            session.flash('status', 'Gagal mengajukan peminjaman alat(checkout)')
+            return response.redirect().toRoute('data-peminjaman', { tool_id: tool.id })
         }
     }
 
@@ -90,36 +76,17 @@ export default class CheckoutsController {
     public async updateStatusTerima({response, params, session}: HttpContextContract) {
         const checkout = await Checkout.findByOrFail('id', params.checkout_id)
 
-        const updateCheckout = await Checkout.updateOrCreate({
-            id: checkout.id
-        }, {
-            status: 'Belum Diambil'
-        })
-
-        if(updateCheckout) {
-            session.flash('status', 'Berhasil menyetujui peminjaman')
-        } else {
-            session.flash('status', 'Gagal menerima pinjaman(updateCheckout)')
-        }
-        return response.redirect().toRoute('/akun')
-    }
-
-    public async updateStatusTolak({response, params, session}: HttpContextContract) {
-        const checkout = await Checkout.findByOrFail('id', params.checkout_id)
         const tool = await Tool.findByOrFail('id', checkout.toolId)
 
-        const updateCheckout = await Checkout.updateOrCreate({
-            id: checkout.id
-        }, {
-            status: 'Ditolak'
-        })
-
         let status = ''
-        let available = tool.available + checkout.quantity
+        let available = tool.available - checkout.quantity
         if (available > 0 ) {
             status = 'Tersedia'
-        } else {
+        } else if (available == 0) {
             status = 'Tidak Tersedia'
+        }else {
+            session.flash('status', 'Jumlah alat yang tersedia tidak mencukupi')
+            return response.redirect().toRoute('checkouts.detail-ubah-status', { checkout_id: checkout.id })
         }
 
         const updateTool = await Tool.updateOrCreate({
@@ -128,12 +95,37 @@ export default class CheckoutsController {
             status: status,
             available: available
         })
+        
+        const updateCheckout = await Checkout.updateOrCreate({
+            id: checkout.id
+        }, {
+            status: 'Belum Diambil'
+        })
+
         if(updateCheckout) {
             if(updateTool) {
-            session.flash('status', 'Peminjaman ditolak')
+            session.flash('status', 'Berhasil menyetujui peminjaman')
             } else {
-                session.flash('status', 'Gagal menolak pinjaman(updateTool)')
+                session.flash('status', 'Gagal menerima pinjaman(updateTool)')
             }
+        } else {
+            session.flash('status', 'Gagal menerima pinjaman(updateCheckout)')
+        }
+        return response.redirect().toRoute('/akun')
+    }
+
+    public async updateStatusTolak({response, params, session}: HttpContextContract) {
+        const checkout = await Checkout.findByOrFail('id', params.checkout_id)
+
+        const updateCheckout = await Checkout.updateOrCreate({
+            id: checkout.id
+        }, {
+            status: 'Ditolak'
+        })
+
+       
+        if(updateCheckout) {
+            session.flash('status', 'Peminjaman ditolak')
         } else {
             session.flash('status', 'Gagal menolak pinjaman(updateCheckout)')
         }

@@ -57,6 +57,7 @@
                     label_2: 'status:',
                     text_1: item.quantity,
                     text_2: item.status,
+                    class_text_2: 'text-warning',
                     text_button: 'Konfirmasi Peminjaman',
                     href: '/detail-ubah-status/' + item.id,
                     image : 'http://localhost:8080/assets/images' + item.tool.image.url,
@@ -74,6 +75,7 @@
                     label_2: 'status:',
                     text_1: item.quantity,
                     text_2: item.status,
+                    class_text_2: 'text-warning',
                     text_button: 'Konfirmasi Pengambilan',
                     href: '/detail-konfirmasi-peminjaman/' + item.id,
                     image : 'http://localhost:8080/assets/images' + item.tool.image.url,
@@ -85,12 +87,15 @@
                 <div id="contentMenungguPersetujuan" class="row content" style="display: none">
                     @each(item in waiting)
                     @if(auth.user.id == item.userId)
-                    @card.cardMediumNoButton({
+                    @card.cardMedium({
                     nama_barang: item.tool.name,
                     label_1: 'Jumlah Peminjaman:',
                     label_2: 'status:',
                     text_1: item.quantity,
                     text_2: item.status,
+                    class_text_2: 'text-warning',
+                    text_button: 'Detail',
+                    href: '/rekap-peminjaman/' + item.id,
                     image : 'http://localhost:8080/assets/images' + item.tool.image.url,
                     })
                     @end
@@ -106,6 +111,7 @@
                     label_2: 'status:',
                     text_1: item.quantity,
                     text_2: 'Diterima',
+                    class_text_2: 'text-success',
                     image : 'http://localhost:8080/assets/images' + item.tool.image.url,
                     })
                     @end
@@ -121,6 +127,7 @@
                     label_2: 'status:',
                     text_1: item.quantity,
                     text_2: item.status,
+                    class_text_2: 'text-danger',
                     image : 'http://localhost:8080/assets/images' + item.tool.image.url,
                     })
                     @end

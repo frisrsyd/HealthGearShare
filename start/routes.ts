@@ -31,12 +31,12 @@ Route.group(() => {
     
     //peminjaman barang
     Route.get('/detail-barang/:category_id', 'PagesController.detailBarang')
-    Route.get('/data-peminjaman/:tool_id', 'PagesController.dataPeminjaman')
+    Route.get('/data-peminjaman/:tool_id', 'PagesController.dataPeminjaman').as('data-peminjaman')
     Route.get('/rekap-peminjaman/:checkout_id', 'PagesController.rekapPeminjaman').as('rekap-peminjaman')
     Route.post('/checkouts/store/:tool_id', 'CheckoutsController.store').as('checkouts.store')
 
     //ubah status peminjaman
-    Route.get('/detail-ubah-status/:checkout_id', 'PagesController.detailUbahStatus')
+    Route.get('/detail-ubah-status/:checkout_id', 'PagesController.detailUbahStatus').as('checkouts.detail-ubah-status')
     Route.get('/detail-konfirmasi-peminjaman/:checkout_id', 'PagesController.konfirmasiPeminjaman')
     Route.post('/update-status/:checkout_id', 'CheckoutsController.updateStatusTerima').as('checkouts.update-status')
     Route.post('/tolak-status/:checkout_id', 'CheckoutsController.updateStatusTolak').as('checkouts.tolak-status')
