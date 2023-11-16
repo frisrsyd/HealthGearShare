@@ -24,7 +24,7 @@
     <div class="container">
         <div class="row justify-content-between ">
             @if(flashMessages.has('status'))
-            <div class="alert alert-success" role="alert">
+            <div class="alert alert-danger" role="alert">
                 {{flashMessages.get('status')}}
             </div>
             @endif
@@ -50,13 +50,26 @@
                         @end
                     </div>
                     <div class="row">
-                        @form.input({
-                        name: 'NIK:',
-                        id :'npm',
-                        type: 'text',
-                        placeholder: 'Masukkan NIK',
-                        })
-                        @end
+                        <div class="col-md">
+                            @form.input({
+                            name: 'NIK:',
+                            id :'npm',
+                            type: 'text',
+                            placeholder: 'Masukkan NIK',
+                            })
+                            @end
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md">
+                            @form.input({
+                            name: 'Tanggal Lahir',
+                            id :'tgl_lahir',
+                            type: 'date',
+                            placeholder: 'Masukkan Tanggal Lahir',
+                            })
+                            @end
+                        </div>
                     </div>
                     <div class="row">
                         @form.input({
