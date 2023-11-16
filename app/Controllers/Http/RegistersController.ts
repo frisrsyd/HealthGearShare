@@ -17,14 +17,13 @@ export default class RegistersController {
         if(isValidNIK(data.npm) == false){
             session.flash('status', 'NIK tidak valid')
             return response.redirect('/signup')
-        }else if(isValidNIK(data.npm) == true){
-            session.flash('status', 'NIK valid')
+        }else if(isValidNIKWithComparison(data.npm, {
+            birthday: data.tgl_lahir
+        }) == false){
+            session.flash('status', 'NIK dan tanggal lagir tidak sesuai')
+            return response.redirect('/signup')
             // return getDataNIK(data.npm)
             // return data.tgl_lahir
-            // return isValidNIKWithComparison(data.npm, {
-            //     provinceKey: '11',
-            //     birthday: data.tgl_lahir
-            // })
         }
         const user = await User.create({
             name: data.name,
