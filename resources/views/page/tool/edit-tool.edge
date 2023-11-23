@@ -9,7 +9,7 @@
                 <h5>Gambar Barang</h5>
                 @if (tool.image)
                 <img src="{{ asset('assets/images' + tool.image.url) }}" alt="Current Image" class="mt-2"
-                    style="width:600px; height: 400px">
+                    style="width:600px; height: 400px; object-fit: cover">
                 @endif
             </div>
             <div class="col-md shadow search-container">
@@ -60,15 +60,17 @@
                         })
                         @end
                     </div>
-                    <div class="row">
-                        <button class="col-md me-1 btn btn-primary shadow" type="submit">Save</button>
+                    <div class="row mb-2">
+                        <button class="col-md btn btn-primary shadow" type="submit">Save</button>
                     </div>
                 </form>
                 <form action="{{route('tools.hapus-tool', {slug: tool?.slug})}}" method="POST">
                     {{ csrfField() }}
-                    <button onclick="alert('Anda yakin ingin menghapus alat ini?')"
-                        class="col-md ms-1 btn btn-danger shadow" type="submit"><i
-                            class="bi bi-trash3-fill me-2"></i>Hapus Alat</button>
+                    <div class="row">
+                        <button onclick="alert('Anda yakin ingin menghapus alat ini?')"
+                            class="col-md btn btn-danger shadow" type="submit"><i
+                                class="bi bi-trash3-fill me-2"></i>Hapus Alat</button>
+                    </div>
                 </form>
             </div>
         </div>
