@@ -12,10 +12,10 @@
             <h3>{{tools?.name}}</h3>
         </div>
         <div class="row">
-            <div class="col-md">
+            <div class="col-md mb-5">
                 <img src="{{ asset('assets/images' + tools?.image.url) }}" alt="{{tools?.slug}}" width="600rem">
             </div>
-            <div class="col-md-4 mb-5">
+            <div class="col-md-4">
                 @if(flashMessages.has('status'))
                 <div class="alert alert-success" role="alert">
                     {{flashMessages.get('status')}}
