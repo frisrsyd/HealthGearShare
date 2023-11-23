@@ -172,15 +172,13 @@ export default class ToolsController {
     if (await tool.save()) {
       session.flash('status', 'Alat berhasil disimpan')
     }
-    else {
-      session.flash('status', 'Alat gagal disimpan')
-    }
-
+    
     return response.redirect().toRoute('/akun')
+
   }
 
-  public async destroy({response, session, auth}: HttpContextContract) {
-    const tool = await Tool.findByOrFail('userId', auth.user?.id)
+  public async destroy({response, session, params}: HttpContextContract) {
+    const tool = await Tool.findByOrFail('slug', params.slug)
     if (tool) {
       await tool.delete()
       session.flash('status', 'Alat berhasil dihapus')
