@@ -76,6 +76,7 @@ export default class PagesController {
             if (checkout.length == 0) {
                 return view.render('page/pengembalian-barang/sedang-dipinjam', { 'error': 'Tidak ada barang yang sedang dipinjam' })
             }
+            
             return view.render('page/pengembalian-barang/sedang-dipinjam', { 'checkouts': checkout })
         }
 

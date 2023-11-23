@@ -106,10 +106,26 @@
                     @end
                     @endif
                     @endeach
+                    @each(item in pengembalian)
+                    @if(auth.user.id == item.userId)
+                    @card.cardMedium({
+                    nama_barang: item.tool.name,
+                    label_1: 'Jumlah Peminjaman:',
+                    label_2: 'status:',
+                    text_1: item.quantity,
+                    text_2: item.status,
+                    class_text_2: 'text-warning',
+                    text_button: 'Detail',
+                    href: '/rekap-peminjaman/' + item.id,
+                    image : 'http://localhost:8080/assets/images' + item.tool.image.url,
+                    })
+                    @end
+                    @endif
+                    @endeach
                 </div>
                 <div id="contentPengembalian" class="row content" style="display: none">
                     @each(item in pengembalian)
-                    @if(auth.user.id == item.userId || auth.user.id == item.tool.userId)
+                    @if(auth.user.id == item.tool.userId)
                     @card.cardMedium({
                     nama_barang: item.tool.name,
                     label_1: 'Jumlah Peminjaman:',
@@ -141,15 +157,17 @@
                     @endif
                     @endeach
                 </div>
-                <div id="contentMyTool" class="row content" style="display: none">
+                <div id="contentMyTool" class="row" style="display: none">
                     @each(item in myTool)
                     @if(auth.user.id == item.userId)
-                    @card.cardMediumNoButton({
+                    @card.cardMedium({
                     nama_barang: item.name,
                     label_1: 'Jumlah Total:',
                     label_2: 'Jumlah Tersedia:',
                     text_1: item.stock,
                     text_2: item.available,
+                    text_button: 'Detail',
+                    href: '/edit-tool/' + item.slug,
                     image : 'http://localhost:8080/assets/images' + item.image.url,
                     })
                     @end

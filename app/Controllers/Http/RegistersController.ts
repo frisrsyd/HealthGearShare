@@ -1,6 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { isValidNIK } from 'nusantara-valid'
-import { getDataNIK } from 'nusantara-valid'
 import { isValidNIKWithComparison } from 'nusantara-valid'
 import User from 'App/Models/User'
 
@@ -20,7 +19,7 @@ export default class RegistersController {
         }else if(isValidNIKWithComparison(data.npm, {
             birthday: data.tgl_lahir
         }) == false){
-            session.flash('status', 'NIK dan tanggal lagir tidak sesuai')
+            session.flash('status', 'NIK dan tanggal lahir tidak sesuai')
             return response.redirect('/signup')
             // return getDataNIK(data.npm)
             // return data.tgl_lahir

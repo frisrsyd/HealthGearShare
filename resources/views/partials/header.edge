@@ -13,21 +13,36 @@
           </li>
           @if(auth.isLoggedIn)
           <li class="nav-item">
-            <a class="nav-link" href="{{route('/sedang-dipinjam')}}">Sedang Dipinjam</a>
+            <a class="nav-link" href="{{route('/sedang-dipinjam')}}">Sedang Meminjam</a>
           </li>
           {{-- <li class="nav-item">
             <a class="nav-link" href="{{route('/riwayat-peminjaman')}}">Riwayat</a>
           </li> --}}
-          <li class="nav-item">
-            <a class="nav-link" href="{{route('/akun')}}">Akun</a>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <i class="bi bi-person-circle me-1"></i>
+              <i class="fas fa-user fa-fw"></i>
+              {{auth.user.name}}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <li class="dropdown-item">
+                <a class="nav-link" href="{{route('/akun')}}">Akun</a>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li class="dropdown-item">
+                <form action="{{route('logout')}}" method="POST">
+                  {{ csrfField() }}
+                  <button type="submit" class="nav-link logoutBtn">Logout</button>
+                </form>
+              </li>
+              @else
+            </ul>
           </li>
-          <li class="nav-item">
-            <form action="{{route('logout')}}" method="POST">
-              {{ csrfField() }}
-              <button type="submit" class="nav-link logoutBtn">Logout</button>
-            </form>
-          </li>
-          @else
+
           <li class="nav-item">
             <a class="nav-link" href="{{route('/login')}}">Login</a>
           </li>

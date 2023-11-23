@@ -58,7 +58,10 @@ Route.group(() => {
 
     //tool
     Route.get('/add-tool', 'PagesController.addTool')
+    Route.get('/edit-tool/:slug', 'ToolsController.edit')
     Route.post('/tools/store', 'ToolsController.store').as('tools.store')
+    Route.post('/hapus-tool/:tool_id', 'ToolsController.destroy').as('tools.hapus-tool')
+    Route.post('/tools/update/:slug', 'ToolsController.update').as('tools.update')
 
     //logout
     Route.post('/logout', 'LoginController.logout').as('logout')
