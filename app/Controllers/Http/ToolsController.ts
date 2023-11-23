@@ -162,16 +162,15 @@ export default class ToolsController {
     tool.available = available
     tool.status = status
     tool.categoryId = category_id
+    tool.maps = data.maps
     
     // updateOrCreate data from slug in tools table
 
 
 
-    // await tool.save()
+    await tool.save()
     
-    if (await tool.save()) {
-      session.flash('status', 'Alat berhasil disimpan')
-    }
+    session.flash('status', 'Alat berhasil disimpan')
     
     return response.redirect().toRoute('/akun')
 
