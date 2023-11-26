@@ -1,23 +1,23 @@
 <header class="header">
   <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top" data-bs-theme="dark" id="navbar">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{{route('/home')}}">HealthGearShare</a>
+      <a class="navbar-brand" href="{{route('/')}}">HealthGearShare</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="{{route('/home')}}">Beranda</a>
-          </li>
           @if(auth.isLoggedIn)
+          <li class="nav-item">
+            <a class="nav-link" href="{{route('/')}}">Beranda</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="{{route('/sedang-dipinjam')}}">Sedang Meminjam</a>
           </li>
-          {{-- <li class="nav-item">
+          <li class="nav-item">
             <a class="nav-link" href="{{route('/riwayat-peminjaman')}}">Riwayat</a>
-          </li> --}}
+          </li>
 
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
@@ -40,12 +40,15 @@
                 </form>
               </li>
               @else
+              <li class="nav-item">
+                <a class="nav-link" href="{{route('/home')}}">Beranda</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{route('/login')}}">Login</a>
+              </li>
             </ul>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="{{route('/login')}}">Login</a>
-          </li>
           @endif
 
         </ul>

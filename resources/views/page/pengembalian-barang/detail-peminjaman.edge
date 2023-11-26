@@ -77,6 +77,14 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
+                        <p>Status</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>: {{checkouts?.status}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
                         <p>Tempat Pengambilan</p>
                     </div>
                     <div class="col-md-6">
@@ -85,15 +93,48 @@
                     </div>
                 </div>
                 <div class="row">
+                    @if(checkouts?.status == 'Dipinjam')
                     <form action="{{route('checkouts.update', {checkout_id: checkouts?.id})}}" method="POST">
                         {{ csrfField() }}
                         <div class="row ps-3 pe-3">
-                            <button class="btn btn-primary shadow" type="submit">Kembalikan barang</button>
+                            <button onclick="confirmReturn(this)" class="btn btn-primary shadow"
+                                type="button">Kembalikan barang</button>
                         </div>
                     </form>
+                    @else
+                    <div class="row ps-3 pe-3">
+                        <button class="btn btn-primary shadow" disabled>Kembalikan barang</button>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        function confirmReturn(button) {
+            var form = button.closest('form'); // Find the parent form element
+            if (form) {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Kembalikan Sekarang!"
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }else{
+                        Swal.fire({
+                            title: "Cancelled!",
+                            text: "Alat tidak jadi dikembalikan",
+                            icon: "cancelled"
+                        })
+                    }
+                });
+            }
+        }
+    </script>
 </section>
 @endsection

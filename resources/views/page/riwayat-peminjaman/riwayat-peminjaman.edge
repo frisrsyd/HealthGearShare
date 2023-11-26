@@ -31,7 +31,7 @@
             text_1: checkout?.quantity,
             text_2: endDate[checkout?.id - 1],
             text_button: 'Details',
-            href: '/detail-riwayat',
+            href: '/detail-riwayat/' + checkout?.id,
             image : 'http://localhost:8080/assets/images' + checkout?.tool.image.url
             })
             @end

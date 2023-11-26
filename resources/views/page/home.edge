@@ -8,6 +8,10 @@
         <div class="alert alert-success" role="alert">
             {{flashMessages.get('status')}}
         </div>
+        @elseif(flashMessages.has('error'))
+        <div class="alert alert-danger" role="alert">
+            {{flashMessages.get('error')}}
+        </div>
         @endif
         @search()
         @end
@@ -33,7 +37,7 @@
             @card.card({
             nama_barang: item.name,
             text_button: 'Details',
-            href: '/detail-barang/' + item.id,
+            href: '/detail-barang/' + item.slug,
             image : 'http://localhost:8080/assets/images/' + item.slug + '.png',
             })
             @end

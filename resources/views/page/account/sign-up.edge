@@ -24,8 +24,12 @@
     <div class="container">
         <div class="row justify-content-between ">
             @if(flashMessages.has('status'))
-            <div class="alert alert-danger" role="alert">
+            <div class="alert alert-success" role="alert">
                 {{flashMessages.get('status')}}
+            </div>
+            @elseif(flashMessages.has('error'))
+            <div class="alert alert-danger" role="alert">
+                {{flashMessages.get('error')}}
             </div>
             @endif
             <div class="col-sm-5">

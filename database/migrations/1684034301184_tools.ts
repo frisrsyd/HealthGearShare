@@ -15,6 +15,7 @@ export default class extends BaseSchema {
       table.integer('available').notNullable()
       table.string('status').notNullable()
       table.string('maps').notNullable()
+      table.boolean('is_active').defaultTo(true).notNullable()
       table.timestamp('created_at', { useTz: true }).defaultTo(this.now())
       table.timestamp('updated_at', { useTz: true }).defaultTo(this.now())
     })

@@ -85,7 +85,7 @@ export default class ToolsController {
       session.flash('status', 'Alat berhasil ditambahkan')
     }
     else {
-      session.flash('status', 'Alat gagal ditambahkan')
+      session.flash('error', 'Alat gagal ditambahkan')
     }
 
     return response.redirect().toRoute('/add-tool')
@@ -97,7 +97,16 @@ export default class ToolsController {
     const tool = await Tool.findByOrFail('slug', params.slug)
     tool.load('category')
     const category = await Category.all()
-    return view.render('page/tool/edit-tool', {tool: tool, category: category})
+    let statusPeminjaman = ""
+    let classStatus = ""
+    if(tool.stock == tool.available){
+      statusPeminjaman = "Alat Tidak Sedang Dipinjam"
+      classStatus = "alert-success"
+    }else{
+      statusPeminjaman = "Alat Sedang Dipinjam"
+      classStatus = "alert-danger"
+    }
+    return view.render('page/tool/edit-tool', {tool: tool, category: category, statusPeminjaman: statusPeminjaman, classStatus: classStatus})
   }
 
   public async update({ request, response, session, params }: HttpContextContract) {
@@ -167,8 +176,13 @@ export default class ToolsController {
     // updateOrCreate data from slug in tools table
 
 
-
-    await tool.save()
+    if(tool.stock == tool.available){
+      await tool.save()
+    }else{
+      session.flash('error', 'Alat sedang dipinjam')
+      //redirect to current page if tool in use
+      return response.redirect().back()
+    }
     
     session.flash('status', 'Alat berhasil disimpan')
     
@@ -179,11 +193,40 @@ export default class ToolsController {
   public async destroy({response, session, params}: HttpContextContract) {
     const tool = await Tool.findByOrFail('slug', params.slug)
     if (tool) {
-      await tool.delete()
-      session.flash('status', 'Alat berhasil dihapus')
+      // make sure tool not in use
+      if (tool.available == tool.stock) {
+        tool.isActive = false
+        await tool.save()
+        session.flash('status', 'Alat berhasil dinonaktifkan')
+      }
+      else {
+        session.flash('error', 'Alat sedang dipinjam')
+        //redirect to current page if tool in use
+        return response.redirect().back()
+      }
     }
     else {
-      session.flash('status', 'Alat gagal dihapus')
+      session.flash('error', 'Alat gagal dinonaktifkan')
+    }
+    return response.redirect().toRoute('/akun')
+  }
+  public async activate({response, session, params}: HttpContextContract) {
+    const tool = await Tool.findByOrFail('slug', params.slug)
+    if (tool) {
+      // make sure tool not in use
+      if (tool.available == tool.stock) {
+        tool.isActive = true
+        await tool.save()
+        session.flash('status', 'Alat berhasil diaktifkan')
+      }
+      else {
+        session.flash('error', 'Alat sedang digunakan')
+        //redirect to current page if tool in use
+        return response.redirect().back()
+      }
+    }
+    else {
+      session.flash('error', 'Alat gagal diaktifkan')
     }
     return response.redirect().toRoute('/akun')
   }

@@ -20,6 +20,10 @@
                 <div class="alert alert-success" role="alert">
                     {{flashMessages.get('status')}}
                 </div>
+                @elseif(flashMessages.has('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{flashMessages.get('error')}}
+                </div>
                 @endif
                 <form action="{{ route('checkouts.store', { tool_id: tools?.id }) }}" method="POST"
                     enctype="multipart/form-data">

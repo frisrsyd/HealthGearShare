@@ -35,6 +35,9 @@ export default class Tool extends BaseModel {
 
     @column()
     public maps: string
+
+    @column()
+    public isActive: boolean
     
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime

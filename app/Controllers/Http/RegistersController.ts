@@ -10,16 +10,16 @@ export default class RegistersController {
         const data = request.only(['name', 'role' ,'email', 'npm', 'password', 'passwordConfirmation', 'tgl_lahir'])
         
         if(data.password != data.passwordConfirmation){
-            session.flash('status', 'Password tidak sama')
+            session.flash('error', 'Password tidak sama')
             return response.redirect('/signup')
         }
         if(isValidNIK(data.npm) == false){
-            session.flash('status', 'NIK tidak valid')
+            session.flash('error', 'NIK tidak valid')
             return response.redirect('/signup')
         }else if(isValidNIKWithComparison(data.npm, {
             birthday: data.tgl_lahir
         }) == false){
-            session.flash('status', 'NIK dan tanggal lahir tidak sesuai')
+            session.flash('error', 'NIK dan tanggal lahir tidak sesuai')
             return response.redirect('/signup')
             // return getDataNIK(data.npm)
             // return data.tgl_lahir
@@ -35,7 +35,7 @@ export default class RegistersController {
             return response.redirect('/login')
         }
         else {
-            session.flash('status', 'Akun gagal ditambahkan')
+            session.flash('error', 'Akun gagal ditambahkan')
             return response.redirect('/signup')
         }
         

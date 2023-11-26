@@ -17,7 +17,14 @@
                 <div class="alert alert-success" role="alert">
                     {{flashMessages.get('status')}}
                 </div>
+                @elseif(flashMessages.has('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{flashMessages.get('error')}}
+                </div>
                 @endif
+                <div class="alert {{classStatus}}" role="alert">
+                    {{statusPeminjaman}}
+                </div>
                 <form method="POST" action="{{route('tools.update', {slug: tool?.slug} )}}"
                     enctype="multipart/form-data">
                     {{ csrfField() }}
@@ -64,14 +71,23 @@
                         <button class="col-md btn btn-primary shadow" type="submit">Save</button>
                     </div>
                 </form>
+                @if(tool.isActive)
                 <form action="{{route('tools.hapus-tool', {slug: tool?.slug})}}" method="POST">
                     {{ csrfField() }}
                     <div class="row">
-                        <button onclick="alert('Anda yakin ingin menghapus alat ini?')"
-                            class="col-md btn btn-danger shadow" type="submit"><i
-                                class="bi bi-trash3-fill me-2"></i>Hapus Alat</button>
+                        <button onclick="deleteData(this)" class="col-md btn btn-danger shadow" type="button"><i
+                                class="bi bi-trash3-fill me-2"></i>Nonaktifkan Alat</button>
                     </div>
                 </form>
+                @else
+                <form action="{{route('tools.activate', {slug: tool?.slug})}}" method="POST">
+                    {{ csrfField() }}
+                    <div class="row">
+                        <button onclick="activateTool(this)" class="col-md btn btn-success shadow" type="button"><i
+                                class="bi bi-check-circle me-2"></i>Aktifkan Alat</button>
+                    </div>
+                </form>
+                @endif
             </div>
         </div>
     </div>
@@ -93,5 +109,55 @@
             toolName.required = true;
         }
     });
+
+    function deleteData(button) {
+        var form = button.closest('form'); // Find the parent form element
+        if (form) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, deactived it!"
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }else{
+                    Swal.fire({
+                        title: "Cancelled!",
+                        text: "Your tool is deactived!",
+                        icon: "success"
+                    })
+                }
+            });
+        }
+    }
+
+    function activateTool(button) {
+        var form = button.closest('form'); // Find the parent form element
+        if (form) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, activate it!"
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }else{
+                    Swal.fire({
+                        title: "Cancelled!",
+                        text: "Your tool is not activate!",
+                        icon: "success"
+                    })
+                }
+            });
+        }
+    }
 </script>
 @endsection

@@ -10,6 +10,10 @@
                 <div class="alert alert-success" role="alert">
                     {{flashMessages.get('status')}}
                 </div>
+                @elseif(flashMessages.has('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{flashMessages.get('error')}}
+                </div>
                 @endif
                 <form action="{{route('login')}}" enctype="multipart/form-data" method="POST">
                     {{csrfField()}}

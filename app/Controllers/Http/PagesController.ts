@@ -25,13 +25,19 @@ export default class PagesController {
 
     public async detailBarang({ view, params, request }: HttpContextContract) {
         // find tool where category_id = category.id and status = 'Tersedia'
-        const tool = await Tool.query().where('categoryId', params.category_id).andWhere('status', 'Tersedia').preload('user')
+        let tool = await Tool.query().where('status', 'Tersedia').andWhere('is_active', true).preload('user').preload('category')
+        tool = tool.filter((item) => {
+            // use params.slug
+            return item.category.slug === params.slug
+        })
         if (tool.length == 0) {
             return view.render('page/peminjaman-barang/detail-barang', { 'error': 'Barang tidak ditemukan' })
         }
         //search tool with user input
         if (request.input('search')) {
-            const tool = await Tool.query().where('categoryId', params.category_id).andWhere('status', 'Tersedia').andWhere('name', 'like', '%' + request.input('search') + '%')
+            tool = tool.filter((item) => {
+                return item.name.toLowerCase().includes(request.input('search').toLowerCase())
+            })
             if (tool.length == 0) {
                 return view.render('page/peminjaman-barang/detail-barang', { 'error': 'Barang tidak ditemukan' })
             }
@@ -41,8 +47,20 @@ export default class PagesController {
     }
 
     public async dataPeminjaman({ view, params }: HttpContextContract) {
-        const tool = await Tool.findBy('id', params.tool_id)
-        return view.render('page/peminjaman-barang/data-peminjaman', { 'tools': tool })
+        const tool = await Tool.findBy('slug', params.slug)
+        if(tool != null){
+            if(tool.isActive){
+                if(tool.status == 'Tersedia'){
+                    return view.render('page/peminjaman-barang/data-peminjaman', { 'tools': tool })
+                }else{
+                    return view.render('page/peminjaman-barang/detail-barang', { 'error': 'Barang tidak tersedia atau sudah tidak dipinjamkan lagi' })
+                }
+            }else{
+                return view.render('page/peminjaman-barang/detail-barang', { 'error': 'Barang tidak tersedia atau sudah tidak dipinjamkan lagi' })
+            }
+        }else{
+            return view.render('page/peminjaman-barang/detail-barang', { 'error': 'Barang tidak ditemukan' })
+        }
     }
 
     public async rekapPeminjaman({ view, params }: HttpContextContract) {
@@ -120,19 +138,14 @@ export default class PagesController {
             return view.render('page/riwayat-peminjaman/riwayat-peminjaman', { 'checkouts': checkout })
         }
         // filter checkout where status = 'Dikembalikan'
+        let endDate:Array<string> = []
         const checkout = query.filter((item) => {
+            endDate.push(item.updatedAt.toFormat('dd/MM/yyyy'))
             return item.status == 'Dikembalikan'
         })
         // change the format of the date
-        let endDate:Array<string> = []
-        for (let i = 0; i < checkout.length; i++) {
-            if (checkout[i].endDate == null) {
-                checkout[i].endDate = checkout[i].endDate
-            }
-            else{
-                endDate[i] = checkout[i].updatedAt.toFormat('dd/MM/yyyy')
-            }
-        }
+        
+        
         
         if (checkout.length == 0) {
             return view.render('page/riwayat-peminjaman/riwayat-peminjaman', { 'error': 'Tidak ada barang yang pernah dipinjam' })
@@ -141,8 +154,23 @@ export default class PagesController {
         return view.render('page/riwayat-peminjaman/riwayat-peminjaman', { 'checkouts': checkout, 'endDate': endDate})
     }
     
-    public async detailRiwayat({ view }: HttpContextContract) {
-        return view.render('page/riwayat-peminjaman/detail-riwayat')
+    public async detailRiwayat({ view, params }: HttpContextContract) {
+        const checkout = await Checkout.findBy('id', params.checkout_id)
+        await checkout?.load('tool')
+        await checkout?.load('user')
+
+        const tool = await Tool.findBy('id', checkout?.toolId)
+        await tool?.load('user')
+    
+        let noPinjam = checkout?.createdAt.toFormat('dd/MM/yyyy')
+        noPinjam = checkout?.tool.name.toUpperCase().replace(/ /g, '_') + '/' + noPinjam + '/' + checkout?.id
+        const startDate = checkout?.startDate.toFormat('dd/MM/yyyy')
+        const endDate = checkout?.endDate.toFormat('dd/MM/yyyy')
+
+        if (checkout == null) {
+            return view.render('page/riwayat-peminjaman/detail-riwayat', { 'error': 'Tidak ada barang yang pernah dipinjam' })
+        }
+        return view.render('page/riwayat-peminjaman/detail-riwayat', { 'tool': tool, 'checkout': checkout, 'noPinjam': noPinjam , 'startDate': startDate, 'endDate': endDate })
     }
 
     public async login({ view }: HttpContextContract) {
@@ -162,10 +190,22 @@ export default class PagesController {
         const checkout = await Checkout.query().where('status', 'Belum Diambil').preload('tool').preload('user')
         const pengembalian = await Checkout.query().where('status', 'Belum Diantar').preload('tool').preload('user')
         const ditolak = await Checkout.query().where('status', 'Ditolak').preload('tool').preload('user')
-        const waiting = await Checkout.query().where('status', 'Menunggu Persetujuan').preload('tool').preload('user')
+        let waiting = await Checkout.query().where('status', 'Menunggu Persetujuan').preload('tool').preload('user')
         const myTool = await Tool.query().preload('category').preload('user')
+        waiting = waiting.sort((a, b) => {
+            return b.createdAt > a.createdAt ? -1 : 1
+        })
+        let isActive = ""
+        for (let i = 0; i < myTool.length; i++) {
+            if (myTool[i].isActive == true) {
+                isActive = "Aktif"
+            }
+            else{
+                isActive = "Tidak Aktif"
+            }
+        }
 
-        return view.render('page/account/akun', { 'users': user, 'checkouts': checkout, 'pengembalian': pengembalian, 'ditolak': ditolak, 'waiting': waiting, 'myTool': myTool })
+        return view.render('page/account/akun', { 'users': user, 'checkouts': checkout, 'pengembalian': pengembalian, 'ditolak': ditolak, 'waiting': waiting, 'myTool': myTool, 'isActive': isActive })
     }
 
     public async addTool({ view }: HttpContextContract) {

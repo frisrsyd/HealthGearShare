@@ -19,6 +19,10 @@
                 <div class="alert alert-success" role="alert">
                     {{flashMessages.get('status')}}
                 </div>
+                @elseif( flashMessages.has('error') )
+                <div class="alert alert-danger" role="alert">
+                    {{flashMessages.get('error')}}
+                </div>
                 @endif
                 <div class="row text-center">
                     <div class="col-md-auto">
@@ -160,13 +164,17 @@
                 <div id="contentMyTool" class="row" style="display: none">
                     @each(item in myTool)
                     @if(auth.user.id == item.userId)
-                    @card.cardMedium({
+                    @card.cardMediumThree({
                     nama_barang: item.name,
                     label_1: 'Jumlah Total:',
                     label_2: 'Jumlah Tersedia:',
+                    label_3: 'Status :',
                     text_1: item.stock,
                     text_2: item.available,
+                    text_3: isActive,
+                    href_text_3: '#',
                     text_button: 'Detail',
+                    target: '_self',
                     href: '/edit-tool/' + item.slug,
                     image : 'http://localhost:8080/assets/images' + item.image.url,
                     })

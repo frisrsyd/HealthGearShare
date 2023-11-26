@@ -34,9 +34,11 @@
             label_3: 'Link Google Maps:',
             text_1: item.user.name,
             text_2: item.available,
+            text_3: 'Klik Disini',
+            target_3: '_blank',
             href_text_3: item.maps,
             text_button: 'Pinjam',
-            href: '/data-peminjaman/' + item.id,
+            href: '/data-peminjaman/' + item.slug,
             image : 'http://localhost:8080/assets/images' + item.image.url,
             })
             @end

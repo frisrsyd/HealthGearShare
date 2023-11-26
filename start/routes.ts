@@ -30,8 +30,8 @@ Route.get('dashboard', async ({ auth }) => {
 Route.group(() => {
     
     //peminjaman barang
-    Route.get('/detail-barang/:category_id', 'PagesController.detailBarang')
-    Route.get('/data-peminjaman/:tool_id', 'PagesController.dataPeminjaman').as('data-peminjaman')
+    Route.get('/detail-barang/:slug', 'PagesController.detailBarang')
+    Route.get('/data-peminjaman/:slug', 'PagesController.dataPeminjaman').as('data-peminjaman')
     Route.get('/rekap-peminjaman/:checkout_id', 'PagesController.rekapPeminjaman').as('rekap-peminjaman')
     Route.post('/checkouts/store/:tool_id', 'CheckoutsController.store').as('checkouts.store')
 
@@ -51,7 +51,7 @@ Route.group(() => {
 
     //riwayat peminjaman
     Route.get('/riwayat-peminjaman', 'PagesController.riwayatPeminjaman')
-    Route.get('/detail-riwayat', 'PagesController.detailRiwayat')
+    Route.get('/detail-riwayat/:checkout_id', 'PagesController.detailRiwayat')
 
     //Category
     Route.post('/categories/store', 'CategoriesController.store').as('categories.store')
@@ -62,17 +62,19 @@ Route.group(() => {
     Route.post('/tools/store', 'ToolsController.store').as('tools.store')
     Route.post('/hapus-tool/:slug', 'ToolsController.destroy').as('tools.hapus-tool')
     Route.post('/tools/update/:slug', 'ToolsController.update').as('tools.update')
+    Route.post('/activate-tool/:slug', 'ToolsController.activate').as('tools.activate')
 
     //logout
     Route.post('/logout', 'LoginController.logout').as('logout')
 
     //home route
     Route.get('/', 'PagesController.home')
-    Route.get('/home', 'PagesController.home')
     
     //account
     Route.get('/akun', 'PagesController.akun')
-}).middleware(['auth'])
+  }).middleware(['auth'])
+  
+Route.get('/home', 'PagesController.home')
 
 //auth route
 Route.get('/login', 'PagesController.login')

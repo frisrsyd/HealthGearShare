@@ -9,11 +9,12 @@
         })
         @end
         <div>
-            <h3>Kamera Canon EOS 800D</h3>
+            <h3>{{checkout?.tool.name}}</h3>
         </div>
         <div class="row">
             <div class="col-md mb-5">
-                <img src="{{ asset('assets/images/camera.jpg') }}" alt="Canon EOS 800D" width="600px">
+                <img src="{{ asset('assets/images' + checkout?.tool.image.url) }}" alt="{{checkout?.tool.name}}"
+                    width="600px">
             </div>
             <div class="col-md-5">
                 <div class="row">
@@ -21,7 +22,7 @@
                         <p>Nama Peminjam</p>
                     </div>
                     <div class="col-md-6">
-                        <p>: Fulan bin Fulan</p>
+                        <p>: {{checkout?.user.name}}</p>
                     </div>
                 </div>
                 <div class="row">
@@ -29,7 +30,15 @@
                         <p>Nama Barang</p>
                     </div>
                     <div class="col-md-6">
-                        <p>: Kamera Canon EOS 800D</p>
+                        <p>: {{checkout?.tool.name}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Nama Barang</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>: {{tool.user.name}}</p>
                     </div>
                 </div>
                 <div class="row">
@@ -37,7 +46,7 @@
                         <p>Jumlah Pinjam</p>
                     </div>
                     <div class="col-md-6">
-                        <p>: 1</p>
+                        <p>: {{checkout?.quantity}}</p>
                     </div>
                 </div>
                 <div class="row">
@@ -45,7 +54,7 @@
                         <p>Nomor Pinjam</p>
                     </div>
                     <div class="col-md-6">
-                        <p>: CAM/800D/06/03/2023</p>
+                        <p>: {{noPinjam}}</p>
                     </div>
                 </div>
                 <div class="row">
@@ -53,7 +62,7 @@
                         <p>Tanggal Pinjam</p>
                     </div>
                     <div class="col-md-6">
-                        <p>: 06/03/2023</p>
+                        <p>: {{startDate}}</p>
                     </div>
                 </div>
                 <div class="row">
@@ -61,7 +70,7 @@
                         <p>Tanggal Kembali</p>
                     </div>
                     <div class="col-md-6">
-                        <p>: 06/03/2023</p>
+                        <p>: {{endDate}}</p>
                     </div>
                 </div>
                 <div class="row">
@@ -69,9 +78,8 @@
                         <p>Tempat Pengambilan</p>
                     </div>
                     <div class="col-md-6">
-                        <p>: <a target="_blank" style="color: #46444c"
-                                href="https://goo.gl/maps/uwTC6LrHTh4c9gt98">Ruang Jurusan Informatika Gedung A Lantai 3
-                                FMIPA USK</a></p>
+                        <p>: <a target="_blank" href="{{checkout?.tool.maps}}">Klik Disini</a>
+                        </p>
                     </div>
                 </div>
                 <div class="row">
@@ -79,7 +87,7 @@
                     type : 'submit',
                     class_button : 'btn btn-primary',
                     text : 'Pinjam Lagi',
-                    href : '/data-peminjaman',
+                    href: '/data-peminjaman/' + checkout?.tool.slug,
                     fun : "return confirm('Apakah kamu yakin ingin meminjam lagi?')",
                     id : 'pinjam_lagi'
                     })

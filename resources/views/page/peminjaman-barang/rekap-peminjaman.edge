@@ -31,6 +31,10 @@
                 <div class="alert alert-success" role="alert">
                     {{flashMessages.get('status')}}
                 </div>
+                @elseif(flashMessages.has('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{flashMessages.get('error')}}
+                </div>
                 @endif
                 <div class="row">
                     <div class="col-md-6">
@@ -103,7 +107,7 @@
                     type : 'submit',
                     class_button : 'btn btn-primary',
                     text : 'Kembali ke Home',
-                    href : '/home',
+                    href : '/',
                     id : 'pinjam-sekarang',
                     })
                     @end
