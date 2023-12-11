@@ -37,13 +37,15 @@ jobs:
           destination: ./_site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
-      - name: Build Adonis Projects
+      - name: Build Adonis Projects - frisrsyd
         # You may pin to the exact commit or the version.
-        # uses: dmdboi/adonis-build-action@6c5903d3615cfad03327c6da13ac85a657ecf494
-        uses: dmdboi/adonis-build-action@v1.3
+        # uses: frisrsyd/adonis-build-action@28ca769891157e83deff7ad63769d4efa00ead5f
+        uses: frisrsyd/adonis-build-action@v1.4
         with:
+          # Whether or not to push the compiled code to a different branch
+          pushToBranch: dist # optional
           # The name of the branch the action should push the compiled code
-          branch: main
+          branch: main # optional, default is dist
           # Your GitHub secret token
           githubToken: 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
           
