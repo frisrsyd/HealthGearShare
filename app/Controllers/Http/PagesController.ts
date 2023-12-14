@@ -140,7 +140,9 @@ export default class PagesController {
         // filter checkout where status = 'Dikembalikan'
         let endDate:Array<string> = []
         const checkout = query.filter((item) => {
-            endDate.push(item.updatedAt.toFormat('dd/MM/yyyy'))
+            if(item.updatedAt != null){
+                endDate.push(item.updatedAt.toFormat('dd/MM/yyyy'))
+            }
             return item.status == 'Dikembalikan'
         })
         // change the format of the date
