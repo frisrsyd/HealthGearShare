@@ -28,6 +28,12 @@ Copy the contents of `.env.example` file to new `.env` file:
 cp .env.example .env
 ```
 
+atau
+
+```sh
+cp .env.example .env
+```
+
 Create an application encryption key:
 
 ```sh
