@@ -28,10 +28,10 @@ Copy the contents of `.env.example` file to new `.env` file:
 cp .env.example .env
 ```
 
-atau
+jika error jalankan
 
 ```sh
-cp .env.example .env
+copy .env.example .env
 ```
 
 Create an application encryption key:
