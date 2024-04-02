@@ -49,7 +49,7 @@ following the .env file, change `MYSQL_DB_NAME = healthgearshare`, so make the e
 Run the migrations:
 
 ```sh
-node ace migration:run
+node ace migration:fresh --seed
 ```
 
 4. run serve with
